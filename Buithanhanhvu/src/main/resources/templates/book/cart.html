@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Giỏ Hàng - Cửa Hàng Sách</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css" rel="stylesheet">
+    <style>
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+        .navbar {
+            background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        }
+        .navbar-brand {
+            font-weight: bold;
+            font-size: 1.5rem;
+            color: white !important;
+        }
+        .nav-link {
+            color: white !important;
+            font-weight: 500;
+            transition: all 0.3s;
+            margin-left: 20px;
+        }
+        .nav-link:hover {
+            transform: translateY(-2px);
+            opacity: 0.8;
+        }
+        .container-cart {
+            background: white;
+            border-radius: 15px;
+            padding: 40px;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
+            margin-top: 40px;
+            margin-bottom: 40px;
+        }
+        h1 {
+            color: #667eea;
+            margin-bottom: 30px;
+            text-align: center;
+            font-weight: bold;
+        }
+        .empty-cart {
+            text-align: center;
+            padding: 60px 20px;
+            color: #999;
+        }
+        .empty-cart i {
+            font-size: 80px;
+            color: #ccc;
+            margin-bottom: 20px;
+        }
+        .empty-cart p {
+            font-size: 1.2rem;
+            margin-bottom: 20px;
+        }
+        .table {
+            margin-bottom: 0;
+        }
+        .table thead th {
+            background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            font-weight: 600;
+            padding: 15px;
+            text-align: center;
+        }
+        .table tbody tr {
+            border-bottom: 1px solid #e0e0e0;
+        }
+        .table tbody tr:hover {
+            background-color: #f9f9f9;
+        }
+        .table tbody td {
+            padding: 15px;
+            text-align: center;
+            vertical-align: middle;
+        }
+        .item-name {
+            text-align: left;
+            font-weight: 500;
+            color: #333;
+        }
+        .price {
+            color: #667eea;
+            font-weight: bold;
+        }
+        .quantity-input {
+            width: 70px;
+            text-align: center;
+        }
+        .btn-update {
+            background: #4CAF50;
+            border: none;
+            color: white;
+            padding: 5px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: all 0.3s;
+        }
+        .btn-update:hover {
+            background: #45a049;
+        }
+        .btn-remove {
+            background: #f44336;
+            border: none;
+            color: white;
+            padding: 5px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: all 0.3s;
+        }
+        .btn-remove:hover {
+            background: #da190b;
+        }
+        .cart-summary {
+            background: #f5f5f5;
+            padding: 25px;
+            border-radius: 10px;
+            margin-top: 30px;
+            border-left: 5px solid #667eea;
+        }
+        .summary-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+            font-size: 1.1rem;
+        }
+        .summary-total {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #667eea;
+            border-top: 2px solid #ddd;
+            padding-top: 15px;
+        }
+        .action-buttons {
+            display: flex;
+            gap: 15px;
+            margin-top: 25px;
+        }
+        .btn-primary-custom {
+            flex: 1;
+            background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+            border: none;
+            color: white;
+            padding: 15px;
+            border-radius: 8px;
+            font-weight: bold;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+        .btn-primary-custom:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(102, 126, 234, 0.4);
+            color: white;
+        }
+        .btn-secondary-custom {
+            flex: 1;
+            background: #f0f0f0;
+            border: 2px solid #ddd;
+            color: #333;
+            padding: 15px;
+            border-radius: 8px;
+            font-weight: bold;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+        .btn-secondary-custom:hover {
+            background: #e0e0e0;
+            color: #333;
+        }
+        .btn-danger-custom {
+            background: #ff6b6b;
+            border: none;
+            color: white;
+            padding: 15px 30px;
+            border-radius: 8px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-decoration: none;
+        }
+        .btn-danger-custom:hover {
+            background: #ff5252;
+        }
+        .alert {
+            border-radius: 10px;
+            border: none;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="/"><i class="bi bi-book"></i> 📚 Cửa Hàng Sách</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/books"><i class="bi bi-list"></i> Danh Sách Sách</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/books/add"><i class="bi bi-plus"></i> Thêm Sách</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="container-cart">
+            <h1><i class="bi bi-cart-check"></i> Giỏ Hàng</h1>
+            
+            <div th:if="${message}" class="alert alert-success alert-dismissible fade show" role="alert">
+                <strong><i class="bi bi-check-circle"></i></strong> <span th:text="${message}"></span>
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            </div>
+
+            <!-- Empty Cart -->
+            <div th:if="${#lists.isEmpty(cart.cartItems)}" class="empty-cart">
+                <i class="bi bi-bag"></i>
+                <p>Giỏ hàng của bạn trống</p>
+                <a href="/books" class="btn btn-primary-custom"><i class="bi bi-shop"></i> Tiếp Tục Mua Sắm</a>
+            </div>
+
+            <!-- Cart Items -->
+            <div th:if="${not #lists.isEmpty(cart.cartItems)}">
+                <div class="table-responsive">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th><i class="bi bi-book"></i> Tên Sách</th>
+                                <th><i class="bi bi-tag"></i> Giá</th>
+                                <th><i class="bi bi-boxes"></i> Số Lượng</th>
+                                <th><i class="bi bi-calculator"></i> Tổng Tiền</th>
+                                <th><i class="bi bi-gear"></i> Hành Động</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr th:each="item : ${cart.cartItems}">
+                                <td class="item-name" th:text="${item.bookName}"></td>
+                                <td class="price" th:text="'₫' + ${#numbers.formatDecimal(item.price, 1, 2)}"></td>
+                                <td>
+                                    <form th:action="@{/books/update-cart}" method="post" style="display: flex; gap: 5px; justify-content: center; align-items: center;">
+                                        <input type="hidden" name="id" th:value="${item.bookId}">
+                                        <input type="number" name="quantity" class="quantity-input quantity" th:value="${item.quantity}" th:attr="data-id=${item.bookId}" min="1" max="100">
+                                        <button type="submit" class="btn-update"><i class="bi bi-arrow-clockwise"></i></button>
+                                    </form>
+                                </td>
+                                <td class="price" th:text="'₫' + ${#numbers.formatDecimal(item.price * item.quantity, 1, 2)}"></td>
+                                <td>
+                                    <form th:action="@{/books/remove-from-cart}" method="post" style="display:inline;">
+                                        <input type="hidden" name="id" th:value="${item.bookId}">
+                                        <button type="submit" class="btn-remove"><i class="bi bi-trash"></i> Xóa</button>
+                                    </form>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Cart Summary -->
+                <div class="cart-summary">
+                    <div class="summary-row">
+                        <span><i class="bi bi-boxes"></i> Tổng số sản phẩm:</span>
+                        <strong th:text="${totalQuantity}"></strong>
+                    </div>
+                    <div class="summary-row summary-total">
+                        <span><i class="bi bi-wallet2"></i> Tổng Cộng:</span>
+                        <strong th:text="'₫' + ${#numbers.formatDecimal(totalPrice, 1, 2)}"></strong>
+                    </div>
+                </div>
+
+                <!-- Action Buttons -->
+                <div class="action-buttons">
+                    <a href="/books" class="btn-secondary-custom"><i class="bi bi-arrow-left"></i> Tiếp Tục Mua Sắm</a>
+                    <form th:action="@{/books/checkout}" method="post" style="flex: 1;">
+                        <button type="submit" class="btn-primary-custom" style="width: 100%;"><i class="bi bi-check-circle"></i> Thanh Toán</button>
+                    </form>
+                </div>
+
+                <!-- Clear Cart Button -->
+                <div style="margin-top: 15px; display: flex; justify-content: center;">
+                    <form th:action="@{/books/clear-cart}" method="post">
+                        <button type="submit" class="btn-danger-custom" onclick="return confirm('Bạn có chắc chắn muốn xóa toàn bộ giỏ hàng?');"><i class="bi bi-trash"></i> Xóa Toàn Bộ Giỏ Hàng</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

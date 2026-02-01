@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Danh sách sách</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <style>
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px 0;
+        }
+        .navbar {
+            background: linear-gradient(90deg, #667eea 0%, #764ba2 100%) !important;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+        .navbar-brand {
+            font-weight: bold;
+            font-size: 1.5rem;
+            color: white !important;
+        }
+        .nav-link {
+            color: rgba(255, 255, 255, 0.9) !important;
+            transition: all 0.3s ease;
+        }
+        .nav-link:hover {
+            color: white !important;
+            transform: translateY(-2px);
+        }
+        .container {
+            max-width: 1200px;
+            margin-top: 30px;
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+        }
+        .page-title {
+            color: #333;
+            font-weight: bold;
+            margin-bottom: 30px;
+            font-size: 2rem;
+            text-align: center;
+            border-bottom: 3px solid #667eea;
+            padding-bottom: 15px;
+        }
+        .search-section {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 25px;
+            justify-content: center;
+        }
+        .search-section input {
+            width: 300px;
+            padding: 10px 15px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 1rem;
+        }
+        .search-section input:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 5px rgba(102, 126, 234, 0.3);
+        }
+        .search-section button {
+            background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 10px 25px;
+            border-radius: 8px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .search-section button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+        table {
+            border-collapse: collapse;
+            width: 100%;
+        }
+        thead {
+            background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+        th {
+            padding: 15px;
+            text-align: left;
+            font-weight: bold;
+            border: none;
+        }
+        th a {
+            color: white;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+        th a:hover {
+            text-decoration: underline;
+            opacity: 0.8;
+        }
+        td {
+            padding: 12px 15px;
+            border-bottom: 1px solid #eee;
+        }
+        tbody tr {
+            transition: all 0.3s ease;
+        }
+        tbody tr:hover {
+            background-color: #f8f9ff;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+        }
+        .action-buttons {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        .btn-edit {
+            background: #28a745;
+            color: white;
+            padding: 6px 12px;
+            border: none;
+            border-radius: 5px;
+            text-decoration: none;
+            font-size: 0.85rem;
+            transition: all 0.3s ease;
+        }
+        .btn-edit:hover {
+            background: #218838;
+            transform: translateY(-2px);
+        }
+        .btn-delete {
+            background: #dc3545;
+            color: white;
+            padding: 6px 12px;
+            border: none;
+            border-radius: 5px;
+            text-decoration: none;
+            font-size: 0.85rem;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        .btn-delete:hover {
+            background: #c82333;
+            transform: translateY(-2px);
+        }
+        .btn-add-cart {
+            background: #007bff;
+            color: white;
+            padding: 6px 12px;
+            border: none;
+            border-radius: 5px;
+            font-size: 0.85rem;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            font-weight: bold;
+        }
+        .btn-add-cart:hover {
+            background: #0056b3;
+            transform: translateY(-2px);
+        }
+        input[type="number"] {
+            width: 50px;
+            padding: 5px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            text-align: center;
+        }
+        .footer {
+            text-align: center;
+            margin-top: 40px;
+            padding: 20px;
+            border-top: 1px solid #eee;
+            color: #666;
+        }
+        .footer a {
+            color: #667eea;
+            text-decoration: none;
+        }
+    </style>
+</head>
+<body>
+<nav class="navbar navbar-expand-lg navbar-dark mb-4">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="/">📚 HUTECH BOOKSTORE</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                data-bs-target="#navbarSupportedContent"
+                aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+                <li class="nav-item">
+                    <a class="nav-link" href="/">🏠 Trang chủ</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link active" href="/books">📖 Danh sách sách</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/books/add">➕ Thêm sách</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/books/cart">🛒 Giỏ hàng</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<div class="container">
+    <h1 class="page-title">📚 Danh sách sách của tôi</h1>
+
+    <div class="search-section">
+        <form th:action="@{/books/search}" method="get" style="display: flex; gap: 10px;">
+            <input type="search" placeholder="Tìm kiếm sách..." name="keyword" class="form-control">
+            <button type="submit" class="btn btn-search">🔍 Tìm</button>
+        </form>
+    </div>
+
+    <div class="table-responsive">
+        <table class="table" th:if="${books != null and books.size() > 0}">
+            <thead>
+            <tr>
+                <th><a th:href="@{/books(pageNo=${currentPage}, sortBy='id')}">ID</a></th>
+                <th><a th:href="@{/books(pageNo=${currentPage}, sortBy='title')}">📖 Tiêu đề</a></th>
+                <th><a th:href="@{/books(pageNo=${currentPage}, sortBy='author')}">✍️ Tác giả</a></th>
+                <th><a th:href="@{/books(pageNo=${currentPage}, sortBy='price')}">💰 Giá</a></th>
+                <th><a th:href="@{/books(pageNo=${currentPage}, sortBy='category')}">📂 Danh mục</a></th>
+                <th>⚙️ Thao tác</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="book : ${books}">
+                <td th:text="${book.getId()}"></td>
+                <td th:text="${book.getTitle()}"></td>
+                <td th:text="${book.getAuthor()}"></td>
+                <td th:text="'$' + ${book.getPrice()}"></td>
+                <td th:text="${book.getCategory() != null ? book.getCategory().getName() : 'N/A'}"></td>
+                <td>
+                    <div class="action-buttons">
+                        <a class="btn-edit" th:href="@{/books/edit/{id}(id=${book.getId()})}">✏️ Sửa</a>
+                        <a class="btn-delete" th:href="@{/books/delete/{id}(id=${book.getId()})}" 
+                           onclick="return confirm('Bạn có chắc muốn xóa sách này?')">🗑️ Xóa</a>
+                        <form th:action="@{/books/add-to-cart}" method="post" style="display: flex; gap: 5px; align-items: center;">
+                            <input type="hidden" name="id" th:value="${book.getId()}"/>
+                            <input type="hidden" name="name" th:value="${book.getTitle()}"/>
+                            <input type="hidden" name="price" th:value="${book.getPrice()}"/>
+                            <input type="number" name="quantity" value="1" min="1" max="100"/>
+                            <button type="submit" class="btn-add-cart">🛒 Thêm</button>
+                        </form>
+                    </div>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<div class="footer">
+    <p>Copyright © 2026 <a href="https://www.hutech.edu.vn/">HUTECH Education</a></p>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
